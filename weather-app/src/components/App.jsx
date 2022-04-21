@@ -61,6 +61,7 @@ function App() {
                             data.name = locationInfo.name;
                             let extractedData = {
                                 name: data.name,
+                                timezone: data.timezone,
                                 date: data.current.dt,
                                 currentTemp: Math.round(data.current.temp),
                                 currentConditions: data.current.weather[0].main,

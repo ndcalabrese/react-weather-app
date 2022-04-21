@@ -1,6 +1,5 @@
 function WeatherCard({ isSubmitted, weatherData }) {
-    console.log(weatherData);
-    function decodeUnixDate (unixDate) {
+    function decodeUnixDate (unixDate, timezone) {
         const ms = unixDate * 1000;
         const longDate = new Date(ms);
         let dateOptions = {
@@ -10,6 +9,7 @@ function WeatherCard({ isSubmitted, weatherData }) {
             month: "long",
             hour: "2-digit",
             minute: "2-digit",
+            timeZone: timezone,
         }
         const shortDate = longDate.toLocaleString("en-US", dateOptions);
         return shortDate;
@@ -28,7 +28,7 @@ function WeatherCard({ isSubmitted, weatherData }) {
                                             {weatherData.name}
                                         </h2>
                                         <p className="weather-location-date">
-                                            {decodeUnixDate(weatherData.date)}
+                                            {decodeUnixDate(weatherData.date, weatherData.timezone)}
                                         </p>
                                     </div>
                                 </div>
