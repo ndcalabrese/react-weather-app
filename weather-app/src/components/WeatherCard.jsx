@@ -1,4 +1,22 @@
 function WeatherCard({ isSubmitted, weatherData }) {
+    
+    function decodeUnixDate (unixDate) {
+        const ms = unixDate * 1000;
+        const longDate = new Date(ms);
+        let dateOptions = {
+            day: "numeric",
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            hour: "2-digit",
+            minute: "2-digit",
+        }
+        const shortDate = longDate.toLocaleString("en-US", dateOptions);
+        return (
+            <p>{shortDate}</p>
+            );
+    }
+    
     if (isSubmitted) {
         return (
             <div className="weather-card-container">
@@ -12,7 +30,7 @@ function WeatherCard({ isSubmitted, weatherData }) {
                                             {weatherData.name}
                                         </h2>
                                         <p className="weather-location-date">
-                                            {weatherData.date}
+                                            {decodeUnixDate(weatherData.date)}
                                         </p>
                                     </div>
                                 </div>
@@ -25,14 +43,14 @@ function WeatherCard({ isSubmitted, weatherData }) {
                                     </div>
                                     <div className="location-conditions">
                                         <p className="current-condition">
-                                            {weatherData.currentConditions}
+                                            Current conditions: {weatherData.currentConditions}
                                         </p>
                                         <p className="high-low-temp">
-                                            High: {weatherData.todaysHigh}{" "}
+                                            Today's High: {weatherData.todaysHigh}{" "}
                                             &#176;F
                                         </p>
                                         <p className="high-low-temp">
-                                            Low: {weatherData.todaysLow} &#176;F
+                                            Today's Low: {weatherData.todaysLow} &#176;F
                                         </p>
                                     </div>
                                 </div>

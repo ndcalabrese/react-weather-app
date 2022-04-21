@@ -7,15 +7,17 @@ function App() {
         value: "",
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [submittedZip, setSubmittedZip] = useState();
+    const [submittedZip, setSubmittedZip] = useState({
+        value: "",
+    });
     const [weatherData, setWeatherData] = useState({});
 
-    function handleSubmission (event, zip) {
+    function handleSubmission(event, zip) {
+        let updatedZip = zip;
         console.log(zip);
         setIsSubmitted(true);
-        setSubmittedZip(zip);
+        setSubmittedZip({ ...submittedZip, value: updatedZip}, fetchWeather(submittedZip.value));
         console.log(submittedZip);
-        fetchWeather(submittedZip);
         event.preventDefault();
     }
 
@@ -23,10 +25,12 @@ function App() {
         let maxLength = 5;
         if (userInput.value.length > maxLength) {
             setUserInput({
+                ...userInput,
                 value: userInput.value.slice(0, maxLength),
             });
         } else {
             setUserInput({
+                ...userInput,
                 value: event.target.value,
             });
         }
@@ -38,8 +42,7 @@ function App() {
     // Checks to see if more than 5 characters were entered into
     // the input box, and if true, removes the last character.
     // maxLength attribute does not work on number input boxes
-    
-    
+
     function fetchWeather(zip) {
         if (isSubmitted) {
             fetch(
@@ -67,9 +70,9 @@ function App() {
                                 currentTemp: Math.round(data.current.temp),
                                 currentConditions: data.current.weather[0].main,
                                 todaysHigh: Math.round(data.daily[0].temp.max),
-                                currentlyFeelsLike: data.current.feels_like,
+                                currentlyFeelsLike: Math.round(data.current.feels_like),
                                 currentHumidity: data.current.humidity,
-                                todaysLow: Math.round(data.daily[0].temp.min)
+                                todaysLow: Math.round(data.daily[0].temp.min),
                             };
                             setWeatherData(extractedData);
                         });
@@ -84,15 +87,16 @@ function App() {
         <div className="App">
             <h1>Weather App</h1>
             <div id="form-container">
-                <ZipCodeForm 
-                    onSubmit={handleSubmission} 
-                    userInput={userInput.value} 
-                    checkChars={event => checkMaxChars(event)}
+                <ZipCodeForm
+                    onSubmit={handleSubmission}
+                    userInput={userInput.value}
+                    checkChars={(event) => checkMaxChars(event)}
                 />
             </div>
-            <WeatherCard 
-                isSubmitted={isSubmitted} 
+            <WeatherCard
+                isSubmitted={isSubmitted}
                 weatherData={weatherData}
+                key={isSubmitted}
             />
         </div>
     );
