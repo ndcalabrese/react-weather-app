@@ -12,9 +12,7 @@ function WeatherCard({ isSubmitted, weatherData }) {
             minute: "2-digit",
         }
         const shortDate = longDate.toLocaleString("en-US", dateOptions);
-        return (
-            <p>{shortDate}</p>
-            );
+        return shortDate;
     }
     
     if (isSubmitted) {
