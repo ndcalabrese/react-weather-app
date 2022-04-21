@@ -13,12 +13,13 @@ function App() {
     const [weatherData, setWeatherData] = useState({});
 
     function handleSubmission(event, zip) {
+        event.preventDefault();
         let updatedZip = zip;
         console.log(zip);
         setIsSubmitted(true);
-        setSubmittedZip({ ...submittedZip, value: updatedZip}, fetchWeather(submittedZip.value));
+        setSubmittedZip({ ...submittedZip, value: updatedZip});
+        fetchWeather(submittedZip.value);
         console.log(submittedZip);
-        event.preventDefault();
     }
 
     function checkMaxChars(event) {
@@ -84,7 +85,7 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <div className="app">
             <h1>Weather App</h1>
             <div id="form-container">
                 <ZipCodeForm

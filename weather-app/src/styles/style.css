@@ -39,9 +39,10 @@ button {
 }
 
 .weather-card-container {
+    display: flex;
     justify-content: center;
     text-align: center;
-    margin: 5px;
+    margin: 20px;
 }
 
 .weather-card-container-bg {
