@@ -7,13 +7,18 @@ function App() {
         value: "",
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [submittedZip, setSubmittedZip] = useState({
-        value: "",
-    })
+    const [submittedZip, setSubmittedZip] = useState();
+    const [weatherData, setWeatherData] = useState({});
 
-    // Checks to see if more than 5 characters were entered into
-    // the input box, and if true, removes the last character.
-    // maxLength attribute does not work on number input boxes
+    function handleSubmission (event, zip) {
+        console.log(zip);
+        setIsSubmitted(true);
+        setSubmittedZip(zip);
+        console.log(submittedZip);
+        fetchWeather(submittedZip);
+        event.preventDefault();
+    }
+
     function checkMaxChars(event) {
         let maxLength = 5;
         if (userInput.value.length > maxLength) {
@@ -27,10 +32,52 @@ function App() {
         }
     }
 
-    function handleSubmission (event, zip) {
-        event.preventDefault();
-        setIsSubmitted(true);
-        setSubmittedZip(zip);
+    // Yes, exposed API keys are poor practice
+    const apiKey = "a26bdd763250fea9fb205ae29c93bddf";
+
+    // Checks to see if more than 5 characters were entered into
+    // the input box, and if true, removes the last character.
+    // maxLength attribute does not work on number input boxes
+    
+    
+    function fetchWeather(zip) {
+        if (isSubmitted) {
+            fetch(
+                `https://api.openweathermap.org/geo/1.0/zip?zip=${zip},US&appid=${apiKey}`
+            )
+                .then((response) => response.json())
+                .then((geoData) => {
+                    const locationInfo = {
+                        latitude: geoData.lat,
+                        longitude: geoData.lon,
+                        name: geoData.name,
+                    };
+                    return locationInfo;
+                })
+                .then((locationInfo) => {
+                    fetch(
+                        `https://api.openweathermap.org/data/2.5/onecall?lat=${locationInfo.latitude}&lon=${locationInfo.longitude}&units=imperial&exclude=hourly,minutely&appid=${apiKey}`
+                    )
+                        .then((response) => response.json())
+                        .then((data) => {
+                            data.name = locationInfo.name;
+                            let extractedData = {
+                                name: data.name,
+                                date: data.current.dt,
+                                currentTemp: Math.round(data.current.temp),
+                                currentConditions: data.current.weather[0].main,
+                                todaysHigh: Math.round(data.daily[0].temp.max),
+                                currentlyFeelsLike: data.current.feels_like,
+                                currentHumidity: data.current.humidity,
+                                todaysLow: Math.round(data.daily[0].temp.min)
+                            };
+                            setWeatherData(extractedData);
+                        });
+                })
+                .catch((error) => {
+                    console.error("Request failed", error);
+                });
+        }
     }
 
     return (
@@ -45,7 +92,7 @@ function App() {
             </div>
             <WeatherCard 
                 isSubmitted={isSubmitted} 
-                zip={submittedZip}
+                weatherData={weatherData}
             />
         </div>
     );
