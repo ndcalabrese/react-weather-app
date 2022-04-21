@@ -6,6 +6,9 @@ body {
     background-image: linear-gradient(to right, #141e30, #243b55);
     font-family: 'Nokora', sans-serif;
     color: #38ef7d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
