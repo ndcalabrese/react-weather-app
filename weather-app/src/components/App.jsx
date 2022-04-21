@@ -3,23 +3,18 @@ import ZipCodeForm from "./ZipCodeForm";
 import React, { useState } from "react";
 
 function App() {
+    
     const [userInput, setUserInput] = useState({
         value: "",
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [submittedZip, setSubmittedZip] = useState({
-        value: "",
-    });
     const [weatherData, setWeatherData] = useState({});
 
     function handleSubmission(event, zip) {
         event.preventDefault();
-        let updatedZip = zip;
         console.log(zip);
         setIsSubmitted(true);
-        setSubmittedZip({ ...submittedZip, value: updatedZip});
-        fetchWeather(submittedZip.value);
-        console.log(submittedZip);
+        fetchWeather(zip);
     }
 
     function checkMaxChars(event) {
@@ -45,7 +40,6 @@ function App() {
     // maxLength attribute does not work on number input boxes
 
     function fetchWeather(zip) {
-        if (isSubmitted) {
             fetch(
                 `https://api.openweathermap.org/geo/1.0/zip?zip=${zip},US&appid=${apiKey}`
             )
@@ -82,7 +76,6 @@ function App() {
                     console.error("Request failed", error);
                 });
         }
-    }
 
     return (
         <div className="app">
@@ -97,7 +90,6 @@ function App() {
             <WeatherCard
                 isSubmitted={isSubmitted}
                 weatherData={weatherData}
-                key={isSubmitted}
             />
         </div>
     );

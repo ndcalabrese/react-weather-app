@@ -1,5 +1,5 @@
 function WeatherCard({ isSubmitted, weatherData }) {
-    
+    console.log(weatherData);
     function decodeUnixDate (unixDate) {
         const ms = unixDate * 1000;
         const longDate = new Date(ms);
