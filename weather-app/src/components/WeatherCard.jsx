@@ -41,7 +41,7 @@ function WeatherCard({ isSubmitted, weatherData }) {
                                     </div>
                                     <div className="location-conditions">
                                         <p className="current-condition">
-                                            Current conditions: {weatherData.currentConditions}
+                                            Current Conditions: {weatherData.currentConditions}
                                         </p>
                                         <p className="high-low-temp">
                                             Today's High: {weatherData.todaysHigh}{" "}
